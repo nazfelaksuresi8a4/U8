@@ -1,20 +1,24 @@
 import requests
 from bs4 import BeautifulSoup
 
-response = requests.get('https://news.ycombinator.com/')
-soup = BeautifulSoup(response.text, 'html.parser')
+main_target = 'https://news.ycombinator.com/'
+
+response = requests.get(url='https://news.ycombinator.com/')
 
 links = []
 
-for link in soup.find_all('a', href=True):
-    href = link['href']
-    
-    if href.startswith('https://'):  
+soup = BeautifulSoup(response.text,'html.parser')
+
+for parser in soup.find_all('a',href=True):
+    href = parser.get('href')
+
+    if href.startswith('https://'):
         links.append(href)
-    
-    if len(links) == 20:
+        print(href)
+    else:
+        pass
+
+    if len(links)>20:
+        print('İlk 20 url çekildi!')
         break
 
-print("İlk 20 HTTPS link:")
-for i, link in enumerate(links, 1):
-    print(f"{i}. {link}")
